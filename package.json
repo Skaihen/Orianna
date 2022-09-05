@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Skaihen/Orianna#readme",
   "dependencies": {
     "@discordjs/opus": "^0.8.0",
+    "@discordjs/rest": "^1.1.0",
     "discord-player": "^5.3.1",
     "discord.js": "^14.3.0"
   }
