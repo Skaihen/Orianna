@@ -1,7 +1,16 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { token } = require('./config.json');
+import fs from 'node:fs';
+import path from 'node:path';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import config from './config.json' assert {type: "json"};
+
+// polyfill de __dirname para es6 https://stackoverflow.com/a/50052194
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+
+const token = config.token;
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -11,8 +20,8 @@ const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('
 
 for (const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
+	const command = import(filePath);
+	command.then(com => client.commands.set(com.default.data.name, com.default))//client.commands.set(com.data.name, com))
 }
 
 client.once('ready', () => {
